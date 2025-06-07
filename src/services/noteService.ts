@@ -17,44 +17,27 @@ interface NoteHubSearchParams {
   };
 }
 
-interface CreateNoteResponse {
-  content: string;
-  createdAt: string;
-  id: number;
-  tag: string;
-  title: string;
-  updatedAt: string;
-  userId: number;
-}
-
-interface RemoveNoteResponse {
-  content: string;
-  createdAt: string;
-  id: number;
-  tag: string;
-  title: string;
-  updatedAt: string;
-  userId: number;
-}
-
 const myToken = import.meta.env.VITE_NOTEHUB_TOKEN;
 
 export async function fetchNotes(
   query: string,
-  page: number
+  page: number,
+  perPage: number = 12
 ): Promise<NoteHubResponse> {
   const noteHubSearchParams: NoteHubSearchParams = {
     params: {
       page,
-      perPage: 12,
+      perPage,
     },
     headers: {
       authorization: `Bearer ${myToken}`,
     },
   };
+
   if (query.trim() !== "") {
     noteHubSearchParams.params.search = query.trim();
   }
+
   const response = await axios.get<NoteHubResponse>(
     "https://notehub-public.goit.study/api/notes/",
     noteHubSearchParams
@@ -63,8 +46,8 @@ export async function fetchNotes(
   return response.data;
 }
 
-export async function removeNote(id: number): Promise<RemoveNoteResponse> {
-  const response = await axios.delete<RemoveNoteResponse>(
+export async function removeNote(id: number): Promise<Note> {
+  const response = await axios.delete<Note>(
     `https://notehub-public.goit.study/api/notes/${id}`,
     {
       headers: {
@@ -75,10 +58,8 @@ export async function removeNote(id: number): Promise<RemoveNoteResponse> {
   return response.data;
 }
 
-export async function createNote(
-  note: NoteFormData
-): Promise<CreateNoteResponse> {
-  const response = await axios.post<CreateNoteResponse>(
+export async function createNote(note: NoteFormData): Promise<Note> {
+  const response = await axios.post<Note>(
     "https://notehub-public.goit.study/api/notes/",
     note,
     {
