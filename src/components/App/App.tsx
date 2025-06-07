@@ -15,7 +15,7 @@ export default function App() {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   const loadNotes = useQuery({
-    queryKey: ["Notes", debouncedQuery, currentPage], // ✅ порядок ключа
+    queryKey: ["Notes", debouncedQuery, currentPage],
     queryFn: () => fetchNotes(debouncedQuery, currentPage),
     placeholderData: keepPreviousData,
   });
@@ -25,7 +25,7 @@ export default function App() {
   };
 
   const closeModal = (): void => {
-    setModalOpen(false); // ✅ більше не скидаємо сторінку
+    setModalOpen(false);
   };
 
   const handlePageChange = (page: number) => {
@@ -34,7 +34,7 @@ export default function App() {
 
   const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
-    setCurrentPage(1); // ✅ при пошуку сторінка скидається
+    setCurrentPage(1);
   };
 
   return (
@@ -45,7 +45,7 @@ export default function App() {
           <Pagination
             pageCount={loadNotes.data.totalPages}
             currentPage={currentPage}
-            onPageChange={handlePageChange} // ✅ зрозуміла назва
+            onPageChange={handlePageChange}
           />
         )}
         <button className={css.button} onClick={openModal}>
